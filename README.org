@@ -4,7 +4,7 @@
 * Visual novel reverse engineering
 Documentation and scripts for working with visual novel archives.
 
-[[./SUPPORTED_FORMATS.html][Supported formats]]
+[[./SUPPORTED_FORMATS.org][Supported formats]]
 
 * Prerequisites
 - Python3 with pip
