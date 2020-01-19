@@ -112,13 +112,14 @@ Total size = 288
 | Unpacked size | 0x011C | 4B   | Unpacked resource size                                          |
 ** Games
 *** Supported
-*** To do
 - [[https://vndb.org/v22880][Shukusei no Girlfriend -the destiny star of girlfriend-]]
 - [[https://vndb.org/v23290][Shukusei no Girlfriend 2 -the destiny star of girlfriend-]]
 - [[https://vndb.org/v23772][Shukusei no Girlfriend 3 -the destiny star of girlfriend-]]
+*** To do
 ** Known users
 - Mirai(https://vndb.org/p4572)
 ** Known engines
+- Whale?
 ** Supported operations
 - Read
 - Write(Only for scripts right now)
