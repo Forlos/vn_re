@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.egg-info/
+vn_re.egg-info
+*.pyc
+*.pyo
+
+# Archives
+*.dat
+*.avi
+*.ogg
+
+# Images
+*.tlg
+*.png
+*.jpeg
+
+# Other
+*.exe
+ext/

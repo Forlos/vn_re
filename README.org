@@ -1,0 +1,23 @@
+* Visual novel reverse engineering
+Documentation and scripts for working with visual novel archives.
+
+[[./SUPPORTED_FORMATS.org][Supported formats]]
+
+* Prerequisites
+- Python3 with pip
+* Installation
+Move into directory with setup.py file in it
+#+BEGIN_SRC bash
+pip install . --user
+#+END_SRC
+Now you should be able to use tools in bin/ directory
+* Structure
+- bin/ directory contains tools for end user such as extracting/packing archives
+- docs/ direcotry contains documentation about archives
+- ksy/ directory contains Kaitai struct description of file formats
+- vn_re/ directory contains main logic for tools to work
+
+Each format should have:
+- Format description as an ORG file
+- [[https://github.com/kaitai-io/kaitai_struct][Kaitai struct]] description of format
+- Python scripts to extract/create archive(creating may not be available)

@@ -1,0 +1,126 @@
+#+title: ACV1 Description
+#+author: Forlos
+#+description: ACV1 file format description
+
+Disclaimer:
+To extract resources you need to have file names(Not true for scripts)
+I provide that list but it is incomplete so some files could be missing
+Extractors should say how much files they were able to extract
+
+* ACV1 file format
+** File format properties
+| Property      | Value                      |
+|---------------+----------------------------|
+| Magic         | 0x31564341 (ACV1)          |
+| Endianess     | Little endian              |
+** Format specific properties
+| Property              | Value                               |
+|-----------------------+-------------------------------------|
+| Master key            | 0x8B6A4E5F                          |
+| Script encryption key | First 4 bytes of crc64 of game name |
+** Archive layout
+| Name        |        Offset | Size                         | Description                         |
+|-------------+---------------+------------------------------+-------------------------------------|
+| Magic       |    0x00000000 | 4B                           | ACV1 archive magic 0x31564341(ACV1) |
+| Entry count |    0x00000004 | 4B                           | Count of resource entries           |
+| Entries     |    0x00000008 | Entry count * Entry size(21) | An array of resource entries        |
+| Resources   | After Entries | Until EOF                    | Possibly compressed resource files  |
+** Resource entry
+Total size = 21
+| Name          | Offset | Size | Description                                |
+|---------------+--------+------+--------------------------------------------|
+| Checksum      | 0x0000 | 8B   | Resource name checksum(crc64)              |
+| Flags         | 0x0008 | 1B   | Resource bit flags                         |
+| File offset   | 0x0009 | 4B   | Offset in archive where resource is stored |
+| Size          | 0x000D | 4B   | Resource size                              |
+| Unpacked size | 0x0011 | 4B   | Unpacked resource size                     |
+*** Hash
+- Crc64 of resource name
+- Resource name is shift-jis encoded string
+*** Flags
+- XOR with Hash[0]
+- Values:
+  - 0 = PLAINTEXT
+  - 1 = ENCRYPTED(XORed)
+  - 2 = COMPRESSED
+  - 4 = TEXT_FILE(not sure about this one)
+*** File offset
+- XOR with Hash[0:4]
+- XOR with Master key(0x8B6A4E5F)
+*** Size
+- XOR with Hash[0:4]
+*** Unpacked size
+- XOR with Hash[0:4]
+** Encryption scheme
+- Number of entries in archive is XORed with master key
+- Each entry in archive contains crc64 of its file name
+- Checksum also works as a key to 'encryption' of entry fields
+  - Flags field is XORed with first byte of checksum
+  - Offset field is XORed with first 4 bytes of checksum AND XORed with master key
+  - Size field is XORed with first 4 bytes of checksum
+  - Unpacked size field is XORed with first 4 bytes of checksum
+- Also now "decrypted" Flags field tells us if there is further "encryption":
+  - If flags AND 2 is 0:
+    - Offset is XORed also with file_name[len(file_name) >> 1] byte
+    - Size is XORed also with file_name[len(file_name) >> 2] byte
+    - Uncompressed size is XORed also with file_name[len(file_name) >> 3] byte
+- Now we can read data from archive
+
+*** Scripts
+You do not need to have file names to extract scripts
+
+- For every chunk of 4 bytes:
+  - XOR it with with first 4 bytes of checksum
+  - then XOR is with script key(which is first 4 bytes of crc64 of game name)
+- If last chunk size is less than 4 leave it as it is.
+- Now decompress data using zlib
+
+*** Resources
+You DO NEED to have file names to extract scripts
+- File names are Shift-jis encoded strings
+- If flags == 0
+  - Data is plaintext and there is no decryption left to do
+- If flags AND 2 == 0 data is decrypted using file name (This one is most likely)
+  #+BEGIN_SRC python
+result = size // len(file_name)
+index = 0
+name_index = 0
+  while index <= size and name_index < (len(file_name) - 1):
+      for i in range(0, result):
+          return_data[index] ^= file_name[name_index]
+          index += 1
+          name_index += 1
+  return return_data
+  #+END_SRC
+- Else then data is compressed and you need to do:
+  - For every chunk of 4 bytes XOR it with with first 4 bytes of checksum
+  - If last chunk size is less than 4 leave it as it is.
+  - Now decompress data using zlib
+
+
+** In memory layout
+Total size = 288
+| Name          | Offset | Size | Description                                                     |
+|---------------+--------+------+-----------------------------------------------------------------|
+| Next ptr      | 0x0000 | 4B   | Next struct pointer(I believe this is Table from c++ boost lib) |
+| List hash     | 0x0004 | 4B   | List hash                                                       |
+| Name checksum | 0x0008 | 8B   | Resource name hash(crc64)                                       |
+| File path     | 0x0010 | 256B | File path of archive where the resource is stored               |
+| Flags         | 0x0110 | 1B   | Resource bit flags                                              |
+| File offset   | 0x0114 | 4B   | Offset in file where resource is stored                         |
+| Size          | 0x0118 | 4B   | Resource size                                                   |
+| Unpacked size | 0x011C | 4B   | Unpacked resource size                                          |
+** Games
+*** Supported
+*** To do
+- [[https://vndb.org/v22880][Shukusei no Girlfriend -the destiny star of girlfriend-]]
+- [[https://vndb.org/v23290][Shukusei no Girlfriend 2 -the destiny star of girlfriend-]]
+- [[https://vndb.org/v23772][Shukusei no Girlfriend 3 -the destiny star of girlfriend-]]
+** Known users
+- Mirai(https://vndb.org/p4572)
+** Known engines
+** Supported operations
+- Read
+- Write(Only for scripts right now)
+** References
+- https://github.com/vn-tools/whale-tools
