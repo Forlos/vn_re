@@ -1,4 +1,8 @@
-#+CAPTION: 'Games' column lists only tested games. Other games could be also working but unexpected things could happen. Be careful!
+#+title: Supported formats
+#+author: Forlos
+#+description: Table of supported formats
+
+'Games' column lists only tested games. Other games could be also working but unexpected things could happen. Be careful!
 
 | Format name | Extension | Create                | Brand/Engine | Games                                                                             |
 |-------------+-----------+-----------------------+--------------+-----------------------------------------------------------------------------------|

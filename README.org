@@ -1,7 +1,10 @@
+#+title: VN_RE
+#+author: Forlos
+
 * Visual novel reverse engineering
 Documentation and scripts for working with visual novel archives.
 
-[[./SUPPORTED_FORMATS.org][Supported formats]]
+[[./SUPPORTED_FORMATS.html][Supported formats]]
 
 * Prerequisites
 - Python3 with pip
