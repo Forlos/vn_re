@@ -18,7 +18,7 @@ Now you should be able to use tools in bin/ directory
 #+BEGIN_SRC bash
 python script_to_run.py <arguments>
 #+END_SRC
-- Example
+** Example
 #+BEGIN_SRC bash
 python extract_resources.py archive1.dat archive2.dat
 #+END_SRC
