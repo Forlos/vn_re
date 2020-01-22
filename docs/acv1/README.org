@@ -76,7 +76,7 @@ You do not need to have file names to extract scripts
 - Now decompress data using zlib
 
 *** Resources
-You DO NEED to have file names to extract scripts
+You DO NEED to have file names to extract resources
 - File names are Shift-jis encoded strings
 - If flags == 0
   - Data is plaintext and there is no decryption left to do
