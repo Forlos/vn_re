@@ -6,23 +6,23 @@ Documentation and scripts for working with visual novel archives.
 
 [[./SUPPORTED_FORMATS.org][Supported formats]]
 
-* Prerequisites
+** Prerequisites
 - Python3 with pip
-* Installation
+** Installation
 Move into directory with setup.py file in it and run:
 #+BEGIN_SRC bash
 pip install . --user
 #+END_SRC
 Now you should be able to use tools in bin/ directory
-* Usage
+** Usage
 #+BEGIN_SRC bash
 python script_to_run.py <arguments>
 #+END_SRC
-** Example
+*** Example
 #+BEGIN_SRC bash
 python extract_resources.py archive1.dat archive2.dat
 #+END_SRC
-* Structure
+** Structure
 - bin/ directory contains tools for end user such as extracting/packing archives
 - docs/ direcotry contains documentation about archives
 - ksy/ directory contains Kaitai struct description of file formats
