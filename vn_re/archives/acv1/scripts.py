@@ -8,12 +8,11 @@ from vn_re.archives.acv1.constants import (
     MAGIC_AND_SIZE,
     ENTRY_SIZE,
     MASTER_KEY,
-    SCRIPT_KEY,
     ACV1_FLAGS_TEXTFILE,
 )
 
 
-def extract_scripts(archive, args):
+def extract_scripts(archive, args, script_key):
     with open(archive, "rb") as input_file:
         acv = Acv1.from_file(archive)
         with progressbar.ProgressBar(
@@ -23,7 +22,7 @@ def extract_scripts(archive, args):
                 xor_key = entry.checksum & 0xFFFFFFFF
                 input_file.seek(entry.offset ^ xor_key ^ acv.master_key)
                 data = decrypt_script(
-                    input_file.read(entry.size ^ xor_key), xor_key, acv.script_key
+                    input_file.read(entry.size ^ xor_key), xor_key, script_key
                 )
                 # file name is a index in archive + checksum as little endian hex string
                 file_name = "{:05}_{}".format(
@@ -71,7 +70,7 @@ def encrypt_scripts(data, xor_key, script_key):
     return result
 
 
-def write_entry(input_file_name, output_file):
+def write_entry(input_file_name, output_file, script_key):
     checksum = bytearray.fromhex(basename(input_file_name).split("_")[1])
     xor_key = int.from_bytes(checksum[0:4], "little")
     size = 0
@@ -81,7 +80,7 @@ def write_entry(input_file_name, output_file):
         data = script.read()
         uncompressed_size = len(data)
         size = output_file.write(
-            encrypt_scripts(zlib.compress(data), xor_key, SCRIPT_KEY)
+            encrypt_scripts(zlib.compress(data), xor_key, script_key)
         )
     flags = ((ACV1_FLAGS_TEXTFILE | ACV1_FLAGS_TEXTFILE) ^ xor_key & 0xFF).to_bytes(
         1, "little"
@@ -92,13 +91,13 @@ def write_entry(input_file_name, output_file):
     return checksum + flags + offset + size + uncompressed_size
 
 
-def pack_scripts(input_files, output_file):
+def pack_scripts(input_files, output_file, script_key):
     output_file.write(bytearray(MAGIC_AND_SIZE + len(input_files) * ENTRY_SIZE))
     archive_header = bytes(
         b"ACV1" + (len(input_files) ^ MASTER_KEY).to_bytes(4, "little")
     )
     for i, input_file in enumerate(input_files):
-        archive_header += write_entry(input_file, output_file)
+        archive_header += write_entry(input_file, output_file, script_key)
 
     output_file.seek(0)
     output_file.write(archive_header)

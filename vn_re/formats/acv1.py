@@ -54,15 +54,6 @@ class Acv1(KaitaiStruct):
         return self._m_master_key if hasattr(self, '_m_master_key') else None
 
     @property
-    def script_key(self):
-        """Key that is used to decrypt scripts."""
-        if hasattr(self, '_m_script_key'):
-            return self._m_script_key if hasattr(self, '_m_script_key') else None
-
-        self._m_script_key = 2634801402
-        return self._m_script_key if hasattr(self, '_m_script_key') else None
-
-    @property
     def entry_count(self):
         """XOR count with master key to get number of entries."""
         if hasattr(self, '_m_entry_count'):

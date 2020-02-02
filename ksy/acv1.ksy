@@ -57,9 +57,6 @@ instances:
   master_key:
     value: 0x8B6A4E5F
     doc: Key that is used to entry encryption
-  script_key:
-    value: 0x9D0BE0FA
-    doc: Key that is used to decrypt scripts
   entry_count:
     value: count ^ master_key
     doc: XOR count with master key to get number of entries
