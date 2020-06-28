@@ -1,0 +1,61 @@
+#+title: CPZ7 Description
+#+author: Forlos
+#+description: CPZ7 file format description
+
+
+* CPZ7 File format
+** File format properties
+| Property  | Value                                                                                           |
+|-----------+-------------------------------------------------------------------------------------------------|
+| Magic     | 0x375A5043 (CPZ7)                                                                               |
+| Endianess | Little endian                                                                                   |
+| Password  | 解析する悪い子はリコがお仕置きしちゃいます。呪われちゃいますよ〜、というかもう呪っちゃいました♪ |
+** Archive layout
+| Name            | Offset                       | Size | Description                                 |
+|-----------------+------------------------------+------+---------------------------------------------|
+| Magic           | 0x00000000                   | 4B   | 0x375A5043 (CPZ7)                           |
+| Header          | 0x00000004                   | 68B  | CPZ7 header                                 |
+| Archive data    | 0x00000048                   |      | Contains data about archive and files in it |
+| File data       | After archive data           |      | Contains data about files                   |
+| Entryption data | After file data              |      | Contains entryption data                    |
+| Files           | After encryption data + 0x48 |      | Raw file data                               |
+*** Header layout
+| Name                     | Offset | Size | Description                   |
+|--------------------------+--------+------+-------------------------------|
+| Archive data entry count | 0x0000 | 4B   | Count of archive data entries |
+| Archive data size        | 0x0004 | 4B   | Archive data size             |
+| File data size           | 0x0008 | 4B   | File data size                |
+| Raw data md5             | 0x000C | 16B  | Raw data md5 checksum         |
+| Cpz7 md5                 | 0x0020 | 16B  | ?                             |
+| Archive data key         | 0x0030 | 4B   | Archive data key              |
+| Unknown                  | 0x0034 | 4B   | ?                             |
+| File decrypt key         | 0x0038 | 4B   | Key used for file decryption  |
+| Unknown                  | 0x003C | 4B   | ?                             |
+| Encryption data size     | 0x0040 | 4B   | Encryption data size          |
+| Header checksum          | 0x0044 | 4B   | header checksum               |
+*** Archive data entry layout
+| Name             | Offset | Size              | Description                                       |
+|------------------+--------+-------------------+---------------------------------------------------|
+| Entry size       | 0x0000 | 4B                | Size of this entry                                |
+| File count       | 0x0004 | 4B                | File count of this archive data entry             |
+| Unknown          | 0x0008 | 4B                | ?                                                 |
+| File decrypt key | 0x000C | 4B                | Key used to decrypt files belonging to this entry |
+| Name             | 0x0010 | Entry size - 0x10 | Name of this entry                                |
+*** File data entry layout
+| Name        | Offset | Size              | Description             |
+|-------------+--------+-------------------+-------------------------|
+| Entry size  | 0x0000 | 4B                | Size of this entry      |
+| Offset      | 0x0004 | 4B                | Offset to raw file data |
+| Unknown     | 0x0008 | 4B                | ?                       |
+| File size   | 0x000C | 4B                | File size               |
+| Unknown     | 0x0010 | 4B                | ?                       |
+| Unknown     | 0x0014 | 4B                | ?                       |
+| Decrypt_key | 0x0018 | 4B                | File decryption key     |
+| Name        | 0x001C | Entry size - 0x1C | File name               |
+*** Encryption data layout
+| Name         | Offset | Size      | Description          |
+|--------------+--------+-----------+----------------------|
+| MD5 checksum | 0x0000 | 16B       | MD5 of contents      |
+| Data size    | 0x0010 | 4B        | raw_data_size?       |
+| Decrypt_key? | 0x0014 | 4B        | decrypt key for data |
+| Data         | 0x0018 | Data_size | data                 |

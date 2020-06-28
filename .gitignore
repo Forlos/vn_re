@@ -1,5 +1,6 @@
 # Python
 __pycache__/
+.mypy_cache/
 *.egg-info/
 vn_re.egg-info
 *.pyc
@@ -13,9 +14,11 @@ vn_re.egg-info
 
 # Images
 *.tlg
+*.pb3
 *.png
 *.jpeg
 
 # Other
 *.exe
+*.ps3
 ext/
