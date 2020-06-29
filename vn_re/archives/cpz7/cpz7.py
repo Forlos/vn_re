@@ -6,6 +6,7 @@ from vn_re.utils.util import chunks, wrapping_sub, wrapping_add, ror, rol
 from vn_re.utils import md5cpz7
 
 
+# Looks like this is NOT game specific but format specific
 header_keys = [
     0xFE3A53DA,
     0x37F298E8,
@@ -25,6 +26,7 @@ GLOBAL_NUM = 0
 DATA1 = list(bytes(512))
 DATA2 = list(bytes(512))
 
+# Looks like this is NOT game specific but format specific
 password = [
     137,
     240,
@@ -312,7 +314,9 @@ def decrypt_data_with_decrypt_table(
     return result
 
 
-def decrypt_data1_with_decrypt_buf(decrypt_buf: bytearray, data: bytearray):
+def decrypt_data1_with_decrypt_buf(
+    decrypt_buf: bytearray, data: bytearray, game_key1=0
+):
     result = bytearray()
     e = 0x76548AEF
     decrypt_index = 0
@@ -328,7 +332,8 @@ def decrypt_data1_with_decrypt_buf(decrypt_buf: bytearray, data: bytearray):
 
         decrypt_index += 1
         decrypt_index &= 3
-        e = wrapping_add(e, 0x10FB562A)
+        a = game_key1 ^ 0x10FB562A  # If game_key is 0 a is just constant
+        e = wrapping_add(e, a)
 
     for i in range(len(data) & 3, 0, -1):
         index = len(data) - i
@@ -346,7 +351,9 @@ def decrypt_data1_with_decrypt_buf(decrypt_buf: bytearray, data: bytearray):
     return result
 
 
-def decrypt_data2_with_decrypt_buf(decrypt_buf: bytearray, data: bytearray):
+def decrypt_data2_with_decrypt_buf(
+    decrypt_buf: bytearray, data: bytearray, game_key2=0
+):
     result = bytearray()
     e = 0x2A65CB4F
     decrypt_index = 0
@@ -362,7 +369,8 @@ def decrypt_data2_with_decrypt_buf(decrypt_buf: bytearray, data: bytearray):
 
         decrypt_index += 1
         decrypt_index &= 3
-        e = wrapping_sub(e, 0x139FA9B)
+        a = game_key2 ^ 0x139FA9B  # If game_key is 0 a is just constant
+        e = wrapping_sub(e, a)
 
     for i in range(len(data) & 3, 0, -1):
         index = len(data) - i
@@ -387,6 +395,7 @@ def decrypt_data2(
     decrypt_table: bytearray,
     data2_size: int,
     md5_cpz7: bytearray,
+    game_key2=0,
 ):
     result = bytearray()
     previous_data = data1
@@ -413,7 +422,9 @@ def decrypt_data2(
                 ^ wrapping_add(key, 0x34216785)
             ).to_bytes(4, "little")
         )
-        internal_data2 = decrypt_data2_with_decrypt_buf(decrypt_buf2, internal_data2)
+        internal_data2 = decrypt_data2_with_decrypt_buf(
+            decrypt_buf2, internal_data2, game_key2
+        )
         previous_data = next_data
         result += internal_data2
 
@@ -467,22 +478,32 @@ def decrypt_file(
     return result
 
 
-def get_file_key(file, archive_data, header):
+def get_file_key(file, archive_data, header, game_key3=0, game_key4=0):
     file_key = file.file_decrypt_key
     file_key = wrapping_add(file_key, archive_data.file_decrypt_key)
     file_key ^= header.archive_data_key_decrypted
-    file_key = wrapping_add(
-        file_key, wrapping_sub(header.archive_data_entry_count_decrypted, 0x5C39E87B),
-    )
+    file_key = wrapping_add(file_key, header.archive_data_entry_count_decrypted)
+    file_key ^= game_key4
+    file_key = wrapping_sub(file_key, 0x5C39E87B)
     file_key ^= wrapping_add(
-        (ror(header.file_decrypt_key_decrypted, 5, 32) * 0x7DA8F173) & 0xFFFFFFFF,
-        0x13712765,
+        wrapping_add(
+            (ror(header.file_decrypt_key_decrypted, 5, 32) * 0x7DA8F173), 0x13712765,
+        ),
+        game_key3,
     )
     return file_key
 
 
-def extract_file(filename):
+def extract_file(filename, game_data):
     cpz = Cpz7.from_file(filename)
+    print(
+        hex(
+            wrapping_add(
+                (ror(cpz.header.file_decrypt_key_decrypted, 5, 32) * 0x7DA8F173),
+                0x13712765,
+            )
+        )
+    )
     data3 = decrypt_data3(
         cpz.encryption_data.data, cpz.encryption_data.data_size, cpz.encryption_data.key
     )
@@ -527,7 +548,7 @@ def extract_file(filename):
             ^ int.from_bytes(md5_cpz7[12:16], "little")
         ).to_bytes(4, "little")
     )
-    data1 = decrypt_data1_with_decrypt_buf(decrypt_buf, data1)
+    data1 = decrypt_data1_with_decrypt_buf(decrypt_buf, data1, game_data[0])
     data2 = data[
         cpz.header.archive_data_size_decrypted : cpz.header.archive_data_size_decrypted
         + cpz.header.file_data_size_decrypted
@@ -542,6 +563,7 @@ def extract_file(filename):
         decrypt_table2,
         cpz.header.file_data_size_decrypted,
         md5_cpz7,
+        game_data[1],
     )
     decrypt_table3 = init_decrypt_table(
         int.from_bytes(md5_cpz7[12:16], "little"), cpz.header.archive_data_key_decrypted
@@ -568,7 +590,9 @@ def extract_file(filename):
             print(file.file_name)
             print(hex(file.file_size))
             contents = cpz.raw_file_data[file.offset : file.offset + file.file_size]
-            file_key = get_file_key(file, archive_data, cpz.header)
+            file_key = get_file_key(
+                file, archive_data, cpz.header, game_data[2], game_data[3],
+            )
             f_decrypted = decrypt_file(
                 contents, file.file_size, md5_cpz7, file_key, decrypt_table3, password,
             )

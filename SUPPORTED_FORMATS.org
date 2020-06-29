@@ -9,3 +9,4 @@
 |             |           |                       |                 | [[https://vndb.org/v23290][Shukusei no Girlfriend 2 -the destiny star of girlfriend-(宿星のガールフレンド 2)]] |
 |             |           |                       |                 | [[https://vndb.org/v23772][Shukusei no Girlfriend 3 -the destiny star of girlfriend-(宿星のガールフレンド 3)]] |
 | [[./bin/cpz7][CPZ7]]        | *.cpz     | No                    | [[https://vndb.org/p132][Purple Software]] | [[https://vndb.org/v21523][Aoi Tori(アオイトリ)]]                                                              |
+|             |           |                       |                 | [[https://vndb.org/v24725][Realive(リアライブ)]]                                                                         |

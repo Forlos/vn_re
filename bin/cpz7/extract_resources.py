@@ -13,11 +13,25 @@ def init_argparse():
     return args
 
 
+def prompt_for_game():
+    games = {1: "aoitori.txt", 2: "realive.txt"}
+    print("Aoi Tori(アオイトリ): 1")
+    print("Realive(リアライブ):  2")
+    num = int(input("Select game(input number): "), 10)
+    with open(games[num], "r") as f:
+        data = {
+            line.split(" ")[0]: [int(v, 16) for v in line.split(" ")[1:]]
+            for line in f.readlines()
+        }
+        return data
+
+
 def main():
     args = init_argparse()
     os.makedirs("ext", exist_ok=True)
     for archive in args.archives:
-        extract_file(archive)
+        filename = os.path.basename(archive)
+        extract_file(archive, prompt_for_game()[filename])
 
 
 if __name__ == "__main__":
