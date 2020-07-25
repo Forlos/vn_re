@@ -70,7 +70,7 @@ types:
         type: u4
       - id: file_count
         type: u4
-      - id: unknown_8
+      - id: offset
         type: u4
       - id: file_decrypt_key
         type: u4

@@ -27,7 +27,7 @@ DATA1 = list(bytes(512))
 DATA2 = list(bytes(512))
 
 # Looks like this is NOT game specific but format specific
-password = [
+PASSWORD = [
     137,
     240,
     144,
@@ -215,8 +215,8 @@ def data3_zero_transform(n, ptr_arr):
         esi = ptr_arr[2]
         while True:
             x = edx & 1
-            edx >>= 1
             result = x + result * 2
+            edx >>= 1
             esi -= 1
             n -= 1
 
@@ -433,7 +433,7 @@ def decrypt_data2(
 
 def decrypt_file(
     file_contents: bytearray,
-    file_size: str,
+    file_size: int,
     md5_cpz7: bytearray,
     key: int,
     decrypt_table: bytearray,
@@ -462,6 +462,7 @@ def decrypt_file(
         dx = c & 3
         b ^= int.from_bytes(md5_cpz7[dx * 4 : (dx * 4) + 4], "little")
         dx = key
+        sys.exit(0)
         result += b.to_bytes(4, "little")
 
         c = wrapping_add(c, wrapping_add(key, b))
@@ -496,14 +497,6 @@ def get_file_key(file, archive_data, header, game_key3=0, game_key4=0):
 
 def extract_file(filename, game_data):
     cpz = Cpz7.from_file(filename)
-    print(
-        hex(
-            wrapping_add(
-                (ror(cpz.header.file_decrypt_key_decrypted, 5, 32) * 0x7DA8F173),
-                0x13712765,
-            )
-        )
-    )
     data3 = decrypt_data3(
         cpz.encryption_data.data, cpz.encryption_data.data_size, cpz.encryption_data.key
     )
@@ -517,7 +510,7 @@ def extract_file(filename, game_data):
     data = decrypt_using_password(
         data,
         cpz.header.archive_data_size_decrypted + cpz.header.file_data_size_decrypted,
-        password,
+        PASSWORD,
         cpz.header.archive_data_key_decrypted ^ 0x3795B39A,
     )
     md5_cpz7 = md5cpz7.md5(cpz.header.cpz7_md5).digest()
@@ -594,7 +587,7 @@ def extract_file(filename, game_data):
                 file, archive_data, cpz.header, game_data[2], game_data[3],
             )
             f_decrypted = decrypt_file(
-                contents, file.file_size, md5_cpz7, file_key, decrypt_table3, password,
+                contents, file.file_size, md5_cpz7, file_key, decrypt_table3, PASSWORD,
             )
             f = open("ext/" + str(file.file_name.split(b"\x00")[0], "ascii"), "wb")
             print(f_decrypted[:4])
@@ -604,4 +597,4 @@ def extract_file(filename, game_data):
 
 if __name__ == "__main__":
     for filename in sys.argv[1:]:
-        extract_file(filename)
+        extract_file(filename, [0, 0, 0, 0])

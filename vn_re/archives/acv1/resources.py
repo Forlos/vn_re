@@ -18,8 +18,8 @@ def decrypt_entry(data, file_name, size, flags, xor_key):
     if flags == Acv1.AcvFlags.plain.value:
         return data
 
-    return_data = bytearray(data)
     if flags & Acv1.AcvFlags.compressed.value == 0:
+        return_data = bytearray(data)
         result = size // len(file_name)
         index = 0
         name_index = 0
@@ -30,6 +30,7 @@ def decrypt_entry(data, file_name, size, flags, xor_key):
             name_index += 1
         return return_data
 
+    return_data = bytearray()
     for chunk in chunks(data, 4):
         if len(chunk) != 4:
             return_data += chunk

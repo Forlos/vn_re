@@ -30,7 +30,7 @@ class Cpz7(KaitaiStruct):
         def _read(self):
             self.entry_size = self._io.read_u4le()
             self.file_count = self._io.read_u4le()
-            self.unknown_8 = self._io.read_u4le()
+            self.offset = self._io.read_u4le()
             self.file_decrypt_key = self._io.read_u4le()
             self.name = self._io.read_bytes((self.entry_size - 16))
 
