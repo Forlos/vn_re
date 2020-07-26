@@ -566,7 +566,6 @@ def extract_file(filename, game_data):
     for i in range(cpz.header.archive_data_entry_count_decrypted):
         entry = cpz.ArchiveDataEntry.from_bytes(data1[index:])
         index += entry.entry_size
-        print(entry.name, entry.entry_size)
         archive_data.append(entry)
 
     files = {}
@@ -581,7 +580,6 @@ def extract_file(filename, game_data):
     for archive_data, file_list in files.items():
         for file in file_list:
             print(file.file_name)
-            print(hex(file.file_size))
             contents = cpz.raw_file_data[file.offset : file.offset + file.file_size]
             file_key = get_file_key(
                 file, archive_data, cpz.header, game_data[2], game_data[3],
@@ -590,7 +588,6 @@ def extract_file(filename, game_data):
                 contents, file.file_size, md5_cpz7, file_key, decrypt_table3, PASSWORD,
             )
             f = open("ext/" + str(file.file_name.split(b"\x00")[0], "ascii"), "wb")
-            print(f_decrypted[:4])
             f.write(f_decrypted)
             f.close()
 
