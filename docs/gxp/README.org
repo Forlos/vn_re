@@ -1,0 +1,45 @@
+#+title: GXP Description
+#+author: Forlos
+#+description: GXP file format description
+
+
+* GXP File format
+** File format properties
+| Property  | Value                                                                                                                 |
+|-----------+-----------------------------------------------------------------------------------------------------------------------|
+| Magic     | 0x00505847 (GXP\0)                                                                                                    |
+| Endianess | Little endian                                                                                                         |
+| Password  | [0x40,0x21,0x28,0x38,0xA6,0x6E,0x43,0xA5,0x40,0x21,0x28,0x38,0xA6,0x43,0xA5, 0x64,0x3E,0x65,0x24,0x20,0x46,0x6E,0x74] |
+** Archive layout
+| Name          |              Offset | Size                | Description             |
+|---------------+---------------------+---------------------+-------------------------|
+| Magic         |          0x00000000 | 4B                  | 0x375A5043 (CPZ7)       |
+| Header        |          0x00000004 | 44B                 | GXP header              |
+| File entries  |          0x00000048 | Specified in header | Array of file entries   |
+| Raw File data | Specified in header | Specified in header | Raw encrypted file data |
+*** Header layout
+| Name                 | Offset | Size | Description                     |
+|----------------------+--------+------+---------------------------------|
+| Unknown              |   0x00 | 4B   | ?                               |
+| Unknown              |   0x04 | 4B   | ?                               |
+| Unknown              |   0x08 | 4B   | ?                               |
+| Unknown              |   0x0C | 4B   | ?                               |
+| Unknown              |   0x10 | 4B   | ?                               |
+| Unknown              |   0x14 | 4B   | ?                               |
+| File entries count   |   0x18 | 4B   | Count of file entries           |
+| File entries size    |   0x1C | 4B   | Size of file entries in bytes   |
+| Unknown              |   0x20 | 4B   | ?                               |
+| Raw file data offset |   0x24 | 4B   | Offset in file to raw file data |
+| Unknown              |   0x28 | 4B   | ?                               |
+*** File entry layout
+| Name           | Offset | Size              | Description                       |
+|----------------+--------+-------------------+-----------------------------------|
+| Entry size     |   0x00 | 4B                | Size of this entry in bytes       |
+| File size      |   0x04 | 4B                | Size of file                      |
+| Unknown        |   0x08 | 4B                | ?                                 |
+| File name size |   0x0C | 4B                | Length of file name string(UTF16) |
+| Unknown        |   0x10 | 4B                | ?                                 |
+| Unknown        |   0x14 | 4B                | ?                                 |
+| File offset    |   0x18 | 4B                | Offset of file in raw file data   |
+| Unknown        |   0x1C | 4B                | ?                                 |
+| File name      |   0x1C | Entry size - 0x20 | File name in UTF16                |

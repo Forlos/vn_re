@@ -9,4 +9,10 @@
 |             |           |                       |                 | [[https://vndb.org/v23290][Shukusei no Girlfriend 2 -the destiny star of girlfriend-(宿星のガールフレンド 2)]] |
 |             |           |                       |                 | [[https://vndb.org/v23772][Shukusei no Girlfriend 3 -the destiny star of girlfriend-(宿星のガールフレンド 3)]] |
 | [[./bin/cpz7][CPZ7]]        | *.cpz     | No                    | [[https://vndb.org/p132][Purple Software]] | [[https://vndb.org/v21523][Aoi Tori(アオイトリ)]]                                                              |
-|             |           |                       |                 | [[https://vndb.org/v24725][Realive(リアライブ)]]                                                                         |
+|             |           |                       |                 | [[https://vndb.org/v24725][Realive(リアライブ)]]                                                               |
+| [[./bin/gxp][GXP]]         | *.gxp     | No                    | [[https://vndb.org/p2692][Astronauts]]      | [[https://vndb.org/v17835][Tou no Shita no Exercitus(塔の下のエクセルキトゥス)]]                               |
+|             |           |                       |                 | [[https://vndb.org/v10047][Erect!(えれくと！)]]                                                                |
+|             |           |                       |                 | [[https://vndb.org/v10427][Spocon! ~Sports Wear-Complex~(すぽコン！～SPORTS WEAR-COMPLEX～)]]                  |
+|             |           |                       |                 | [[https://vndb.org/v15697][Tsukiyo no Mura(憑夜ノ村)]]                                                         |
+|             |           |                       |                 | [[https://vndb.org/v12604][Aozora Stripe(あおぞらストライプ)]]                                                 |
+|             |           |                       |                 | [[https://vndb.org/v12338][Grimoire no Shisho(魔導書の司書)]]                                                              |
