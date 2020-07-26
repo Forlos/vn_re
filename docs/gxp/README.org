@@ -2,6 +2,7 @@
 #+author: Forlos
 #+description: GXP file format description
 
+Looks like this one is not game specific. Works on every GXP archive.
 
 * GXP File format
 ** File format properties
