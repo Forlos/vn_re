@@ -1,0 +1,33 @@
+#+title: PFS Description
+#+author: Forlos
+#+description: PFS file format description
+
+Only pf8 is supported right now
+
+* GXP File format
+** File format properties
+| Property  | Value                                                         |
+|-----------+---------------------------------------------------------------|
+| Magic     | 0x5058{version} (pf{version}) version is 1 bytes ascii number |
+| Endianess | Little endian                                                 |
+| Password  | SHA1 of archive data                       |
+** Archive layout
+| Name          |             Offset | Size                | Description             |
+|---------------+--------------------+---------------------+-------------------------|
+| Magic         |         0x00000000 | 3B                  | pf{version}             |
+| Header        |         0x00000003 | 8B                  | GXP header              |
+| Archive data  |         0x0000000B | Specified in header | Array of file entries   |
+| Raw File data | After archive data | EOF                 | Raw encrypted file data |
+*** Header layout
+| Name               | Offset | Size | Description                      |
+|--------------------+--------+------+----------------------------------|
+| Archive data size  |   0x00 | 4B   | Size of archive data in bytes    |
+| File entries count |   0x04 | 4B   | Count of file entries in archive |
+*** File entry layout
+| Name           | Offset              | Size           | Description                |
+|----------------+---------------------+----------------+----------------------------|
+| File name size | 0x00                | 4B             | Length of file name string |
+| File name      | 0x04                | File name size | File name in UTF8          |
+| Unknown        | File name size + 4  | 4B             | ?                          |
+| File offset    | File name size + 8  | 4B             | Offset of file in archive  |
+| File size      | File name size + 12 | 4B             | Size of file               |
