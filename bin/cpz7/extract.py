@@ -14,9 +14,10 @@ def init_argparse():
 
 
 def prompt_for_game():
-    games = {1: "aoitori.txt", 2: "realive.txt"}
+    games = {1: "aoitori.txt", 2: "realive.txt", 3: "seishun.txt"}
     print("Aoi Tori(アオイトリ): 1")
     print("Realive(リアライブ):  2")
+    print("Seishun:  3")
     num = int(input("Select game(input number): "), 10)
     with open(games[num], "r") as f:
         data = {

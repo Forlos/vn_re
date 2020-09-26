@@ -4,6 +4,8 @@
 * Visual novel reverse engineering
 Documentation and scripts for working with visual novel archives.
 
+For single binary with GUI see: https://github.com/Forlos/akaibu
+
 [[./SUPPORTED_FORMATS.org][Supported formats]]
 
 ** Prerequisites
