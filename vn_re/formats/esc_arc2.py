@@ -16,7 +16,7 @@ class EscArc2(KaitaiStruct):
 
     def _read(self):
         self.magic = self._io.ensure_fixed_contents(b"\x45\x53\x43\x2D\x41\x52\x43\x32")
-        self.unk0 = self._io.read_u4le()
+        self.unk1 = self._io.read_u4le()
         self.file_count = self._io.read_u4le()
         self.unk2 = self._io.read_u4le()
 

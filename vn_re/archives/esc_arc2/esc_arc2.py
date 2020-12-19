@@ -32,26 +32,26 @@ def decrypt_file_entries(file_entries, file_entry_key, key):
 def extract_file(filename):
     arc = EscArc2.from_file(filename)
     archive_file = open(filename, "rb")
-    unk0 = arc.unk0
+    unk1 = arc.unk1
     file_count = arc.file_count
 
-    unk0 ^= arc.key
-    file_name_table_size = ((unk0 >> 1) ^ unk0) >> 3
-    d = wrapping_add(unk0, unk0) ^ unk0
+    unk1 ^= arc.key
+    file_name_table_size = ((unk1 >> 1) ^ unk1) >> 3
+    d = wrapping_add(unk1, unk1) ^ unk1
     d = wrapping_add(d, d)
     d = wrapping_add(d, d)
     d = wrapping_add(d, d)
-    file_name_table_size ^= d ^ unk0
+    file_name_table_size ^= d ^ unk1
     file_count ^= file_name_table_size
     file_name_table_size ^= arc.key
-    unk0 = (
+    unk1 = (
         wrapping_add(file_name_table_size, file_name_table_size) ^ file_name_table_size
     )
-    unk0 = wrapping_add(unk0, unk0)
-    unk0 = wrapping_add(unk0, unk0)
-    unk0 = wrapping_add(unk0, unk0)
+    unk1 = wrapping_add(unk1, unk1)
+    unk1 = wrapping_add(unk1, unk1)
+    unk1 = wrapping_add(unk1, unk1)
     file_entry_key = ((file_name_table_size >> 1) ^ file_name_table_size) >> 3
-    file_entry_key ^= unk0 ^ file_name_table_size
+    file_entry_key ^= unk1 ^ file_name_table_size
     file_name_table_size = arc.unk2 ^ file_entry_key
     file_count_in_bytes = file_count * arc.file_entry_size
 

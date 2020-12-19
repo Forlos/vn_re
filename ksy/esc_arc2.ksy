@@ -7,7 +7,7 @@ meta:
 seq:
   - id: magic
     contents: "ESC-ARC2"
-  - id: unk0
+  - id: unk1
     type: u4
   - id: file_count
     type: u4
