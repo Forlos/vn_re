@@ -1,6 +1,5 @@
 import sys
 import os
-import zlib
 
 from vn_re.formats.buriko_arc import BurikoArc
 
