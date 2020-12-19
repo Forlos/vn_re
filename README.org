@@ -6,14 +6,12 @@ Documentation and scripts for working with visual novel archives.
 
 For single binary with GUI see: https://github.com/Forlos/akaibu
 
-[[./SUPPORTED_FORMATS.org][Supported formats]]
-
 ** Prerequisites
 - Python3 with pip
 ** Installation
 Move into directory with setup.py file in it and run:
 #+BEGIN_SRC bash
-pip install . --user
+pip install -e . --user
 #+END_SRC
 Now you should be able to use tools in bin/ directory
 ** Usage

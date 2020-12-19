@@ -63,7 +63,7 @@ def extract_file(filename):
 
     for file in file_entries:
         name = str(
-            file_names[file.file_name_table_offset :].split(b"\x00")[0], "ascii"
+            file_names[file.file_name_table_offset :].split(b"\x00")[0], "sjis"
         ).replace("\\", "/")
         print(
             name,
