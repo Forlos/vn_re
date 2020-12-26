@@ -7,5 +7,5 @@ setup(
     author="Forlos",
     author_email="forlos@disroot.org",
     packages=find_namespace_packages(include=["vn_re.*"]),
-    install_requires=["kaitaistruct", "progressbar2", "Pillow"],
+    install_requires=["kaitaistruct", "progressbar2", "Pillow", "python-camellia"],
 )
