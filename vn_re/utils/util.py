@@ -15,6 +15,10 @@ def wrapping_add(a, b):
     return (a + b) & 0xFFFF_FFFF
 
 
+def wrapping_add8(a, b):
+    return (a + b) & 0xFF
+
+
 ror = lambda val, r_bits, max_bits: (
     (val & (2 ** max_bits - 1)) >> r_bits % max_bits
 ) | (val << (max_bits - (r_bits % max_bits)) & (2 ** max_bits - 1))
