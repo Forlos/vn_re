@@ -211,7 +211,6 @@ def transform(buf, akb, start_index):
             + (wrapping_add8(pixel[3], prev[3]) << 24)
         ).to_bytes(4, "little")
         result += prev
-    popoga = result[start_index:]
     result += buf[start_index + w_in * 4 : start_index + akb.width * 4]
 
     for line_index, line in enumerate(
@@ -227,9 +226,6 @@ def transform(buf, akb, start_index):
             + ((line_index + 1) * akb.width * 4)
         ]
         prev_line = prev_line[: len(cur_line)]
-        if popoga != prev_line and line_index == 0:
-            print(line_index, "popoga")
-            break
         for pixel, prev in zip(chunks(cur_line, 4), chunks(prev_line, 4)):
             cur = (
                 wrapping_add8(pixel[0], prev[0])
