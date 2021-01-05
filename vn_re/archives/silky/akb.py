@@ -256,9 +256,9 @@ def apply_filters(buf, akb):
                 if i not in range(akb.top, akb.bottom) or j not in range(
                     akb.left, akb.right
                 ):
-                    buf[i * akb.width * 4 + j * 4] = b
+                    buf[i * akb.width * 4 + j * 4] = r
                     buf[i * akb.width * 4 + j * 4 + 1] = g
-                    buf[i * akb.width * 4 + j * 4 + 2] = r
+                    buf[i * akb.width * 4 + j * 4 + 2] = b
                     buf[i * akb.width * 4 + j * 4 + 3] = a
     return buf
 
