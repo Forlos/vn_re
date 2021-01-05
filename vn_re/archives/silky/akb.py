@@ -214,7 +214,7 @@ def transform(buf, akb, start_index):
 
     for line_index, line in enumerate(
         chunks(
-            buf[start_index + akb.width * 4 : start_index + h_in * akb.width * 4],
+            buf[start_index + akb.width * 4 : start_index + (h_in - 1) * akb.width * 4],
             akb.width * 4,
         )
     ):
