@@ -253,7 +253,7 @@ def apply_filters(buf, akb):
 
         for i in range(akb.height):
             for j in range(akb.width):
-                if i not in range(akb.top, akb.bottom) or j not in range(
+                if i not in range(akb.top, akb.bottom - 1) or j not in range(
                     akb.left, akb.right
                 ):
                     buf[i * akb.width * 4 + j * 4] = r
