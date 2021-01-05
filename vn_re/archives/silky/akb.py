@@ -1,11 +1,10 @@
 import sys
-import lzss
 from hexdump import hexdump
 
 from PIL import Image
 
 from vn_re.formats.akb import Akb
-from vn_re.utils.util import chunks, wrapping_add8, wrapping_add
+from vn_re.utils.util import chunks, wrapping_add8
 
 
 def bgra_to_rgba(buf):
