@@ -12,7 +12,7 @@ types:
   header:
     seq:
       - id: magic
-        type: u4
+        contents: "LIBP"
       - id: file_entries_count
         type: u4
       - id: unk2

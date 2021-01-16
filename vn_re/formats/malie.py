@@ -25,7 +25,7 @@ class Malie(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self.magic = self._io.read_u4le()
+            self.magic = self._io.ensure_fixed_contents(b"\x4C\x49\x42\x50")
             self.file_entries_count = self._io.read_u4le()
             self.unk2 = self._io.read_u4le()
             self.unk3 = self._io.read_u4le()

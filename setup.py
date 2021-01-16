@@ -12,6 +12,5 @@ setup(
         "progressbar2",
         "Pillow",
         "python-camellia",
-        "zlib",
     ],
 )

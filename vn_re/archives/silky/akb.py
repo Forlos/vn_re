@@ -5,18 +5,7 @@ from PIL import Image
 
 from vn_re.formats.akb import Akb
 from vn_re.utils.util import chunks, wrapping_add8
-
-
-def bgra_to_rgba(buf):
-    result = bytearray()
-    for chunk in chunks(buf, 4):
-        a = int.from_bytes(chunk, "little")
-        chunk[2] = a & 0xFF
-        chunk[1] = (a >> 8) & 0xFF
-        chunk[0] = (a >> 16) & 0xFF
-        chunk[3] = (a >> 24) & 0xFF
-        result += chunk
-    return result
+from vn_re.utils.image import bgra_to_rgba
 
 
 def bitmap_to_png(buf, width):
