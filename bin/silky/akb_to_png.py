@@ -1,5 +1,6 @@
 import argparse
 import progressbar
+import os
 
 from vn_re.archives.silky.akb import convert_image
 
@@ -22,8 +23,12 @@ def main():
         max_value=len(args.images), redirect_stdout=True
     ) as bar:
         for i, image in enumerate(args.images):
-            img = convert_image(image)
-            img.save(image.replace("akb", "png").replace("AKB", "PNG"), "PNG")
+            try:
+                img = convert_image(image)
+                path, _ = os.path.splitext(image)
+                img.save(path + ".png", "PNG")
+            except Exception as e:
+                print(image, e)
             bar.update(i + 1)
 
 

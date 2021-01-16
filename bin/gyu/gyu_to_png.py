@@ -33,9 +33,12 @@ def main():
         max_value=len(args.images), redirect_stdout=True
     ) as bar:
         for i, image in enumerate(args.images):
-            img = convert_image(image, seeds)
-            path, _ = os.path.splitext(image)
-            img.save(path + ".png", "PNG")
+            try:
+                img = convert_image(image, seeds)
+                path, _ = os.path.splitext(image)
+                img.save(path + ".png", "PNG")
+            except Exception as e:
+                print(image, e)
             bar.update(i + 1)
 
 
