@@ -2,7 +2,6 @@ import sys
 import os
 
 from vn_re.formats.gxp import Gxp
-from vn_re.utils.util import wrapping_sub
 
 PASSWORD = [
     0x40,
