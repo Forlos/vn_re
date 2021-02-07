@@ -2,13 +2,17 @@ import sys
 import os
 
 from vn_re.formats.g00 import G00
-from vn_re.utils.image import bgra_to_rgba
+from vn_re.utils.image import bgra_to_rgba, resolve_color_table
 from PIL import Image
+
+from hexdump import hexdump
 
 
 def decompress(src, dest_len, version):
     if version == 0:
         return decompress0(src, dest_len)
+    elif version == 1:
+        return decompress2(src, dest_len)
     elif version == 2:
         return decompress2(src, dest_len)
     else:
@@ -107,12 +111,24 @@ def read_chunk(src, dest, dest_index, padding, counter, line):
 
 def convert_image(filename):
     g00 = G00.from_file(filename)
+    print(g00.version, filename)
     data = decompress(
         g00.pixel_data.data, g00.pixel_data.uncompressed_image_size, g00.version
     )
 
     if g00.version == 0:
         data = bgra_to_rgba(data)
+        i = Image.frombytes(
+            "RGBA",
+            (g00.width, g00.height),
+            bytes(data),
+        )
+        return [i]
+
+    elif g00.version == 1:
+        color_table = G00.ColorTable.from_bytes(data)
+        color_index_table = data[color_table.size * 4 + 2 :]
+        data = bgra_to_rgba(resolve_color_table(color_index_table, color_table.data))
         i = Image.frombytes(
             "RGBA",
             (g00.width, g00.height),

@@ -87,3 +87,9 @@ types:
         # g
       - id: height
         type: u2
+  color_table:
+    seq:
+      - id: size
+        type: u2
+      - id: data
+        size: size * 4

@@ -41,3 +41,11 @@ def bitmap_to_png_with_padding(buf, width, padding):
     for chunk in chunks(buf, width):
         result = chunk[:-padding] + result
     return result
+
+
+def resolve_color_table(color_index_table, color_table):
+    color_table = [c for c in chunks(color_table, 4)]
+    result = bytearray()
+    for index in color_index_table:
+        result += color_table[index]
+    return result

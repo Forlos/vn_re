@@ -63,6 +63,18 @@ class G00(KaitaiStruct):
             self.full_height = self._io.read_u4le()
 
 
+    class ColorTable(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self.size = self._io.read_u2le()
+            self.data = self._io.read_bytes((self.size * 4))
+
+
     class Header(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
