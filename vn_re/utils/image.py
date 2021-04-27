@@ -43,9 +43,25 @@ def bitmap_to_png_with_padding(buf, width, padding):
     return result
 
 
+def remove_bitmap_padding(buf, width, padding):
+    if padding == 0:
+        return buf
+    result = bytearray()
+    for chunk in chunks(buf, width):
+        result += chunk[:-padding]
+    return result
+
+
 def resolve_color_table(color_index_table, color_table):
     color_table = [c for c in chunks(color_table, 4)]
     result = bytearray()
     for index in color_index_table:
         result += color_table[index]
+    return result
+
+
+def add_alpha_channel(buf):
+    result = bytearray()
+    for chunk in chunks(buf, 3):
+        result += chunk + b"\xFF"
     return result

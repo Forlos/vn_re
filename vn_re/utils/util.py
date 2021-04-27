@@ -15,6 +15,10 @@ def wrapping_add(a, b):
     return (a + b) & 0xFFFF_FFFF
 
 
+def wrapping_shl(a, bits):
+    return (a << bits) & 0xFFFF_FFFF
+
+
 def wrapping_add8(a, b):
     return (a + b) & 0xFF
 
