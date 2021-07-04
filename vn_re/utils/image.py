@@ -18,10 +18,10 @@ def bgra_to_rgba(buf):
     result = bytearray()
     for chunk in chunks(buf, 4):
         a = int.from_bytes(chunk, "little")
-        chunk[2] = a & 0xFF
-        chunk[1] = (a >> 8) & 0xFF
-        chunk[0] = (a >> 16) & 0xFF
-        chunk[3] = (a >> 24) & 0xFF
+        chunk[2] = a & 0xFF  # blue
+        chunk[1] = (a >> 8) & 0xFF  # green
+        chunk[0] = (a >> 16) & 0xFF  # red
+        chunk[3] = (a >> 24) & 0xFF  # alpha
         result += chunk
     return result
 
@@ -49,6 +49,14 @@ def remove_bitmap_padding(buf, width, padding):
     result = bytearray()
     for chunk in chunks(buf, width):
         result += chunk[:-padding]
+    return result
+
+
+def resolve_color_table_without_alpha(color_index_table, color_table):
+    color_table = [c for c in chunks(color_table, 3)]
+    result = bytearray()
+    for index in color_index_table:
+        result += color_table[index]
     return result
 
 

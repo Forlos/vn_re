@@ -1,9 +1,7 @@
 import sys
 import os
-from sys import version
 
 from PIL import Image
-from hexdump import hexdump
 
 from vn_re.formats.iar import Iar
 from vn_re.utils.util import wrapping_add, wrapping_shl
