@@ -236,9 +236,7 @@ def extract_file(filename):
 
 if __name__ == "__main__":
     for filename in sys.argv[1:]:
-        # try:
-        extract_file(filename)
-    # except Exception as e:
-    #     print(filename, e)
-
-# /run/media/forlos/Samsung_T5/Circus/D.S. -Dal Segno-/AdvData/GRP/SYSTEM/EYECATCHCHIP.CRX requested 268435440 bytes, but got only 10454 bytes
+        try:
+            extract_file(filename)
+        except Exception as e:
+            print(filename, e)
