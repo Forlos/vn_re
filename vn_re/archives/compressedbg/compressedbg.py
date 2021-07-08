@@ -64,7 +64,6 @@ def fill_some_buf(src):
 
 def fill_some_big_buf(src):
     v25 = 0
-    v6 = 0
     dest = bytearray(12264)
     dest_index = 8
     for i in range(256):
@@ -76,7 +75,6 @@ def fill_some_big_buf(src):
         dest[dest_index - 20 : dest_index - 16] = (0xFFFFFFFF).to_bytes(4, "little")
         dest[dest_index - 16 : dest_index - 12] = i.to_bytes(4, "little")
         dest[dest_index - 12 : dest_index - 8] = i.to_bytes(4, "little")
-        v6 = wrapping_add(b, v25)
         v25 = wrapping_add(v25, b)
 
     xd = (
@@ -179,7 +177,6 @@ def fill_pixel_buf(size, src):
     dest = bytearray(size)
     src_index = 0
     dest_index = 0
-    result = 0
     flag = True
     while src_index < len(src):
         b = 0xFF
@@ -195,7 +192,6 @@ def fill_pixel_buf(size, src):
             c += 7
             d |= a
 
-        result = wrapping_add(result, d)
         if flag:
             dest[dest_index : dest_index + d] = src[src_index : src_index + d]
             flag = False
@@ -281,6 +277,10 @@ def parse_pixel_data(src, width, height, bytes_per_pixel):
             result = packuswb(p2)
             dest[dest_index : dest_index + 4] = result
             dest_index += 4
+
+    if bytes_per_pixel == 3:
+        for i in range(3, width * height * 4, 4):
+            dest[i] = 0xFF
 
     return dest
 
