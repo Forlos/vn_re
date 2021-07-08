@@ -15,12 +15,27 @@ def wrapping_add(a, b):
     return (a + b) & 0xFFFF_FFFF
 
 
+def wrapping_mul(a, b):
+    return (a * b) & 0xFFFF_FFFF
+
+
 def wrapping_shl(a, bits):
     return (a << bits) & 0xFFFF_FFFF
 
 
 def wrapping_add8(a, b):
     return (a + b) & 0xFF
+
+
+def wrapping_add16(a, b):
+    return (a + b) & 0xFFFF
+
+
+def wrapping_sub8(a, b):
+    v = (a - b) & 0xFF
+    if v < 0:
+        v = 0xFF + v + 1
+    return v
 
 
 ror = lambda val, r_bits, max_bits: (
